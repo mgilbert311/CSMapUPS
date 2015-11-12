@@ -13,8 +13,8 @@ public class ValueNode implements Evaluable{
      * 
      * @param d
      */
-    public ValueNode(int d){
-         this.data = d;
+    public ValueNode(double val){
+         this.data = val;
     }
     
     /**
