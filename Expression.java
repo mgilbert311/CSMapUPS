@@ -70,18 +70,18 @@ public class Expression implements Evaluable{
 	//if full
 		//put on left
 		//if full go up?
-    public void makeNode(String s)
-    {
-        //postfix into node, push node onto estack, estack into trees???
-        Scanner scannedPostfix = new Scanner(s);
-        while(scannedPostfix.hasNext())
-        {
-            eStack.push(scannedPostfix.next());
-        }
-        //turn into node
+    //public void makeNode(String s)
+    //{
+    //    //postfix into node, push node onto estack, estack into trees???
+    //    Scanner scannedPostfix = new Scanner(s);
+    //    while(scannedPostfix.hasNext())
+    //    {
+    //        eStack.push(scannedPostfix.next());
+    //    }
+    //    //turn into node
         
-        System.out.println(eStack);
-    }
+    //    System.out.println(eStack);
+    //}
     
         public void makeNode(String s)
     {
@@ -102,17 +102,18 @@ public class Expression implements Evaluable{
                 //an int and is made into a ValueNode
                 postfixNodes.push( new ValueNode(value)); 
             }
-            catch(Exception NumberFormatException)//by trowing the exception we know the string is not a integer with values
+            catch(NumberFormatException e)//by trowing the exception we know the string is not a integer with values
             {
                 // check to see if the string is an operator  
-                if(thing.equals("*")||thing.equals("/")||thing.equals("+")||thing.equals("-"))
-                {
-                    postfixNodes.push(new BinOpNode(thing)); //makes the OperatorNode
+                if(thing.equals("*")||thing.equals("/")||thing.equals("+")||thing.equals("-")){
+                
+                    postfixNodes.push(new BinOpNode(thing, null, null)); //makes the OperatorNode
                 }
                 else //if its not a value or an operator then iit must be a varible
                 {
                     postfixNodes.push(new VariableNode(thing)); //makes the VariableNode
                 }
+                throw new NumberFormatException("Number not formated correctly");
             }
 
         }
