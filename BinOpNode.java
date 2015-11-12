@@ -11,6 +11,8 @@ public class BinOpNode implements Evaluable{
     static Evaluable leftNode;
     static Evaluable rightNode;
     Expression expr;
+        private final String NODE_TYPE = "BinOpNode";
+
     
     //Hello friends
     //Im Here
@@ -80,6 +82,11 @@ public class BinOpNode implements Evaluable{
         }
         return value;
 
+    }
+    
+        public String getNODE_TYPE()
+    {
+        return NODE_TYPE;
     }
     
     /* How if a node only has it's one data value supposed to create an 
