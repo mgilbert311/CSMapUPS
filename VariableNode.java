@@ -16,12 +16,12 @@ public class VariableNode implements Evaluable{
 	 * 
 	 * @param d
 	 */
-	public VariableNode(String d){ 
+	public VariableNode(String varName){ 
 		//Make sure it is not a Operator
 		if(d.equals("*")||d.equals("/")||d.equals("+")||d.equals("-")){
 			throw new InputMismatchException("Not a variable");
 		}
-		this.data = d;
+		this.data = varName;
 		this.left = null;
 		this.right = null;
 	}
