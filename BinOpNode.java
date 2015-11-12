@@ -12,6 +12,7 @@ public class BinOpNode implements Evaluable{
     static Evaluable rightNode;
     Expression expr;
     
+    //Hello friends
     /**
      * 
      * @param Op the operand used for evaluation
