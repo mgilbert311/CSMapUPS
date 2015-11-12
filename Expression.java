@@ -72,7 +72,7 @@ public class Expression implements Evaluable{
 		//if full go up?
     public void makeNode(String s)
     {
-        //postfix into node, push node onto estack
+        //postfix into node, push node onto estack, estack into trees???
         Scanner scannedPostfix = new Scanner(s);
         while(scannedPostfix.hasNext())
         {
