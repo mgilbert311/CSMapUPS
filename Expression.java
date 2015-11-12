@@ -82,6 +82,16 @@ public class Expression implements Evaluable{
         
         System.out.println(eStack);
     }
+    
+    /**
+     * 
+     * /
+     * 
+  
+    	public static void test() {
+    	
+	 }
+	 
 	/**
 	 * 
 	 * @return
