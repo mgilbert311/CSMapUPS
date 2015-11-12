@@ -17,6 +17,10 @@ public class VariableNode implements Evaluable{
 	 * @param d
 	 */
 	public VariableNode(String varName){ 
+		
+		//What do we mod this by??
+		//int index = Math.abs(s.hashCode(varName)) % ;
+		
 		//Make sure it is not a Operator
 		if(d.equals("*")||d.equals("/")||d.equals("+")||d.equals("-")){
 			throw new InputMismatchException("Not a variable");
