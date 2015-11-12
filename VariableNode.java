@@ -7,10 +7,11 @@ import java.util.Map;
  * @author Nicole Cahlander, Shannon Leahy, Mark Gilbert 
  */
 public class VariableNode implements Evaluable{
-
+	    private final String NODE_TYPE = "VariableNode";
 	private String data;
 	private Evaluable left;
 	private Evaluable right;
+
 
 	/**
 	 * 
@@ -53,7 +54,11 @@ public class VariableNode implements Evaluable{
 	public String getData(){ 
 		return data;
 	}
-
+		    
+    public String getNODE_TYPE()
+    {
+        return NODE_TYPE;
+    }
 
 	//keeps track of the values for the varibles
 	/**Evaluates the expression and returns its value as a double.
