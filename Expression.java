@@ -83,6 +83,76 @@ public class Expression implements Evaluable{
         System.out.println(eStack);
     }
     
+        public void makeNode(String s)
+    {
+        //postfix into node, push node onto estack
+        Stack<Evaluable> postfixNodes = new Stack<Evaluable>();
+        Scanner scannedPostfix = new Scanner(s);
+
+        while(scannedPostfix.hasNext()) {                 // Keep going while there's more
+            //get the next portion of the string wether its operator, value or varible
+            String thing = scannedPostfix.next();  
+            
+            
+            try
+            {
+                int value = Integer.parseInt(thing); //this will attempt to pars the value to a int
+                
+                // my making it to this line the thing is forsure 
+                //an int and is made into a ValueNode
+                postfixNodes.push( new ValueNode(value)); 
+            }
+            catch(Exception NumberFormatException)//by trowing the exception we know the string is not a integer with values
+            {
+                // check to see if the string is an operator  
+                if(thing.equals("*")||thing.equals("/")||thing.equals("+")||thing.equals("-"))
+                {
+                    postfixNodes.push(new BinOpNode(thing)); //makes the OperatorNode
+                }
+                else //if its not a value or an operator then iit must be a varible
+                {
+                    postfixNodes.push(new VariableNode(thing)); //makes the VariableNode
+                }
+            }
+
+        }
+        
+        
+                //         while(!postfixNodes.empty())
+                //         {
+                //             Stack<Evaluable> wait = new Stack<Evaluable>();
+                //             Evaluable node = postfixNodes.pop();
+                // 
+                //             try {
+                //             if(node.getNODE_TYPE().equals("BinOpNode"))
+                //             {
+                //                 try
+                //                 {
+                //                     while(!wait.empty())
+                //                     {
+                //                         if(node.leftNode != null)
+                //                         {}
+                //                     }
+                //                 }
+                //                 catch(Exception e){}
+                //             }
+                //             if(node.getNODE_TYPE().equals("ValueNode") || node.getNODE_TYPE().equals("VariableNode"))
+                //             {
+                //                 wait.push(node);
+                //             }
+                //             
+                //             //go through and take nodes off saving them in numeric order if varible || value
+                //             //if operater then take the node and all the previously poped and 
+                //             //link themselves togetheras a mini tree
+                //         }
+                //         catch(Exception e){}
+                //         
+                //     }
+        //turn into node
+
+        System.out.println(postfixNodes);
+    }
+    
     /**
      * 
      * /
