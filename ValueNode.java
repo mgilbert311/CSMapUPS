@@ -8,7 +8,8 @@ import java.util.Map;
  */
 public class ValueNode implements Evaluable{
     private int data;
-    
+    private final String NODE_TYPE = "ValueNode";
+     
     /**
      * 
      * @param d
@@ -34,6 +35,11 @@ public class ValueNode implements Evaluable{
         return data;
     }
     
+        
+    public String getNODE_TYPE()
+    {
+        return NODE_TYPE;
+    }
     /**
      * 
      */
