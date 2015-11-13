@@ -82,77 +82,70 @@ public class Expression implements Evaluable{
         
     //    System.out.println(eStack);
     //}
-    
-        public void makeNode(String s)
-    {
-        //postfix into node, push node onto estack
-        Stack<Evaluable> postfixNodes = new Stack<Evaluable>();
-        Scanner scannedPostfix = new Scanner(s);
+    	public void buildTree(String s)
+	{
+		//postfix into node, push node onto the stack
+		Stack<Evaluable> postfixNodes = new Stack<Evaluable>();
+		Scanner scannedPostfix = new Scanner(s);
 
-        while(scannedPostfix.hasNext()) {                 // Keep going while there's more
-            //get the next portion of the string wether its operator, value or varible
-            String thing = scannedPostfix.next();  
-            
-            
-            try
-            {
-                int value = Integer.parseInt(thing); //this will attempt to pars the value to a int
-                
-                // my making it to this line the thing is forsure 
-                //an int and is made into a ValueNode
-                postfixNodes.push( new ValueNode(value)); 
-            }
-            catch(NumberFormatException e)//by trowing the exception we know the string is not a integer with values
-            {
-                // check to see if the string is an operator  
-                if(thing.equals("*")||thing.equals("/")||thing.equals("+")||thing.equals("-")){
-                
-                    postfixNodes.push(new BinOpNode(thing, null, null)); //makes the OperatorNode
-                }
-                else //if its not a value or an operator then iit must be a varible
-                {
-                    postfixNodes.push(new VariableNode(thing)); //makes the VariableNode
-                }
-                throw new NumberFormatException("Number not formated correctly");
-            }
 
-        }
-        
-        
-                //         while(!postfixNodes.empty())
-                //         {
-                //             Stack<Evaluable> wait = new Stack<Evaluable>();
-                //             Evaluable node = postfixNodes.pop();
-                // 
-                //             try {
-                //             if(node.getNODE_TYPE().equals("BinOpNode"))
-                //             {
-                //                 try
-                //                 {
-                //                     while(!wait.empty())
-                //                     {
-                //                         if(node.leftNode != null)
-                //                         {}
-                //                     }
-                //                 }
-                //                 catch(Exception e){}
-                //             }
-                //             if(node.getNODE_TYPE().equals("ValueNode") || node.getNODE_TYPE().equals("VariableNode"))
-                //             {
-                //                 wait.push(node);
-                //             }
-                //             
-                //             //go through and take nodes off saving them in numeric order if varible || value
-                //             //if operater then take the node and all the previously poped and 
-                //             //link themselves togetheras a mini tree
-                //         }
-                //         catch(Exception e){}
-                //         
-                //     }
-        //turn into node
+		while(scannedPostfix.hasNext()) {                 // Keep going while there's more
+			//get the next portion of the string wether its operator, value or varible
+			String thing = scannedPostfix.next();  
 
-        System.out.println(postfixNodes);
-    }
+			try
+			{
+				int value = Integer.parseInt(thing); //this will attempt to pars the value to a int
+				// my making it to this line the thing is forsure 
+				//an int and is made into a ValueNode
+				postfixNodes.push( new ValueNode(value)); 
+			}
+			catch(NumberFormatException e)//by trowing the exception we know the string is not a integer with values
+			{
+				// check to see if the string is an operator  
+				if(thing.equals("*")||thing.equals("/")||thing.equals("+")||thing.equals("-")){				
+					postfixNodes.push(new BinOpNode(thing, null, null)); //makes the OperatorNode
+				}
+				else{//if its not a value or an operator then iit must be a varible				
+					postfixNodes.push(new VariableNode(thing)); //makes the VariableNode
+				}
+			}
+
+		}
+		//While the stack with the elements is not empty, build the tree
+		while(!postfixNodes.empty())
+		{
+			//New stack to push tree elements, so when we take them off it builds the tree
+			Stack<Evaluable> wait = new Stack<Evaluable>();
+			Evaluable node = postfixNodes.pop();
+			BinOpNode bon;
+			VariableNode varNode;
+			ValueNode valNode;
+
+			//If the node is an operator, make it a root of a tree
+			if(node.equals(bon))
+			{
+				node.evaluate(maps);
+				node.
+				if(node.equals() != null)
+				{}
+			}
+		}
+
+
+		if(node.equals(valNode) || node.equals(varNode))
+		{
+			wait.push(node);
+		}
+
+		//go through and take nodes off saving them in numeric order if varible || value
+		//if operater then take the node and all the previously poped and 
+		//link themselves togetheras a mini tree
+		//turn into node
+
+		System.out.println(postfixNodes);
+	}
+
     
     /**
      * 
