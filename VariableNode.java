@@ -70,6 +70,34 @@ public class VariableNode implements Evaluable{
 
 		return 1.0;
 	}
+	/**Evaluates the expression and returns its value as a double.
+    @param java.util.Map<java.lang.String,java.lang.Double>
+    @return value*/
+    public double evaluate(Map<String,Double> env){
+        // wait should this return the value of the varible if not how can a varible be made into a double
+        //look up in map value
+        //throw exception if you can't find value env will be that
+
+        double value = Integer.MAX_VALUE;
+        try
+        {
+            if(env.get(this.data) != null) //if map has this variable on it
+            {
+                //System.out.println(env.get(this.data));
+                value = env.get(this.data); //retrieves value from map
+            }
+            else
+            {
+                throw new IllegalArgumentException();
+            }
+        }
+        catch(IllegalArgumentException e)
+        {
+            System.out.println("Not found in map!");
+        }
+        
+        return value;
+    }
 
 	/**
 	 * 
