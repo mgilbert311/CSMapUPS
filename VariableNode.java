@@ -7,44 +7,20 @@ import java.util.Map;
  * @author Nicole Cahlander, Shannon Leahy, Mark Gilbert 
  */
 public class VariableNode implements Evaluable{
-	    private final String NODE_TYPE = "VariableNode";
 	private String data;
-	private Evaluable left;
-	private Evaluable right;
-
+	private String name;
 
 	/**
 	 * 
 	 * @param d
 	 */
-	public VariableNode(String varName){ 
-		
-		//What do we mod this by??
-		//int index = Math.abs(s.hashCode(varName)) % ;
-		
+	public VariableNode(String d){ 
 		//Make sure it is not a Operator
 		if(d.equals("*")||d.equals("/")||d.equals("+")||d.equals("-")){
 			throw new InputMismatchException("Not a variable");
 		}
-		this.data = varName;
-		this.left = null;
-		this.right = null;
-	}
-
-	/**
-	 * 
-	 * @param l
-	 */
-	public void setLeft(Evaluable l){   
-		left = l;
-	}
-
-	/**
-	 * 
-	 * @param r
-	 */
-	public void setRight(Evaluable r){
-		right = r;
+		this.data = d;
+		name = d;
 	}
 
 	/**
@@ -54,56 +30,49 @@ public class VariableNode implements Evaluable{
 	public String getData(){ 
 		return data;
 	}
-		    
-    public String getNODE_TYPE()
-    {
-        return NODE_TYPE;
-    }
 
-	//keeps track of the values for the varibles
-	/**Evaluates the expression and returns its value as a double.
-       @param java.util.Map<java.lang.String,java.lang.Double>
-       @return value*/
-	public double evaluate(Map<String,Double> env){
-		// wait should this return the value of the varible if not how can a varible be made into a double 
-
-
-		return 1.0;
-	}
 	/**Evaluates the expression and returns its value as a double.
     @param java.util.Map<java.lang.String,java.lang.Double>
     @return value*/
-    public double evaluate(Map<String,Double> env){
-        // wait should this return the value of the varible if not how can a varible be made into a double
-        //look up in map value
-        //throw exception if you can't find value env will be that
+	public double evaluate(Map<String,Double> env){
 
-        double value = Integer.MAX_VALUE;
-        try
-        {
-            if(env.get(this.data) != null) //if map has this variable on it
-            {
-                //System.out.println(env.get(this.data));
-                value = env.get(this.data); //retrieves value from map
-            }
-            else
-            {
-                throw new IllegalArgumentException();
-            }
-        }
-        catch(IllegalArgumentException e)
-        {
-            System.out.println("Not found in map!");
-        }
-        
-        return value;
-    }
+		double value = 0;
+
+		if(env == null){
+			return value;
+			
+		}
+		return env.get(this.data);
+		
+//		if(env.isEmpty() && env.containsKey(data) == false ){
+//			throw new NullPointerException("Not found in map!");
+//		}else {
+//			
+//			 return value;
+//		}
+//			if(env == null || ){
+//				//If the 
+//				throw new NullPointerException("Not found in map!");
+//			}else{
+//				
+//				value = env.get(this.data); //retrieves value from map
+//			}
+//			if(env.get(this.data) != null){ //if map has this variable on it
+//			
+//				//System.out.println(env.get(this.data));
+//				value = env.get(this.data); //retrieves value from map
+//			}
+			
+		}
+
+		
+	
 
 	/**
 	 * 
 	 */
 	public String toString(){
-		return this.data;
+		return name;
 	}
 }
 
