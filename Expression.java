@@ -1,4 +1,6 @@
 package arithmeticExpression;   
+import java.util.EmptyStackException;
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
@@ -13,162 +15,242 @@ import arithmeticExpression.InfixToPostfixParens.SyntaxErrorException;
  * @author  Nicole Cahlander, Shannon Leahy, Mark Gilbert
  */
 public class Expression implements Evaluable{
-    Stack<String> eStack = new Stack<String>(); 
-	double value = 0;
 	String postfix = "";
+	public BinOpNode bon;
+	public VariableNode varNode;
+	public ValueNode valNode;
+	public static HashMap env;
+
+	static Stack<Evaluable> finalTree;
+
 	/**
 	 * 
 	 * @param infix
 	 * @throws SyntaxErrorException 
 	 */
 	public Expression (String infix) throws SyntaxErrorException{
-		//can that just be a String or does it have to be java.lang.String
-		// how will the infix equations be written ie will there be space divisions
 		try{
 			InfixToPostfixParens converter = new InfixToPostfixParens();
 			postfix = converter.convert(infix);
-			System.out.println(postfix.toString());
+			System.out.println("Postfix representation in constructor" + postfix.toString());
+			finalTree = eval(postfix);
 		} catch (SyntaxErrorException e) {
 			throw new SyntaxErrorException("Not valid input");		
-			
 		}
-		  makeNode(postfix);
 	}
 
 	/**
 	 * 
 	 */
 	public double evaluate(Map<String, Double> env){	
-		   //thatItem.evaluate()
-        ExprEval expEvaluator = new ExprEval();
-        value = expEvaluator.eval(postfix);
-        if(env == null)
-        {
-            return value;
-        }
-        return value;
-        //return 1.0;
+		Evaluable nodeToEval = finalTree.pop();
+		System.out.println("The node to evaluate " + nodeToEval);
+		System.out.println("Tree in evaluate method" + finalTree);
+		double value = nodeToEval.evaluate(env);
+		//If the tree is not there, throw an exceptions
+		if(finalTree == null){
+			throw new EmptyStackException();
+		}
+		System.out.println("value from evaluate " + value);
+		return value;
+
 	}
 
-//tree stack 
-//1. make a stack of the trees by making new root every time we come across an operand -- fill RIGHT TO LEFT 
-//2. pop off top of stack (should be root operand)
-//3. loop/recursion to check right -- within each tree, check to see if we have filled right and left, stitch if there's empty - when we hit bottom, go out of right loop
-//4. loop/recursion to check lefted -- within each tree, check to see if we have filled the right and left 
-//done with if/ else if -- done!!!!! return full tree stitched together?
-
-//some code to ponder below~~~
-//get top
-//get next
-	// put on right
-//getnext
-	//put on right
-	//if full
-		//put on left
-//getnext
-	//put on right
-	//if full
-		//put on left
-		//if full go up?
-    //public void makeNode(String s)
-    //{
-    //    //postfix into node, push node onto estack, estack into trees???
-    //    Scanner scannedPostfix = new Scanner(s);
-    //    while(scannedPostfix.hasNext())
-    //    {
-    //        eStack.push(scannedPostfix.next());
-    //    }
-    //    //turn into node
-        
-    //    System.out.println(eStack);
-    //}
-    	public void buildTree(String s)
-	{
-		//postfix into node, push node onto the stack
-		Stack<Evaluable> postfixNodes = new Stack<Evaluable>();
-		Scanner scannedPostfix = new Scanner(s);
-
-
-		while(scannedPostfix.hasNext()) {                 // Keep going while there's more
-			//get the next portion of the string wether its operator, value or varible
-			String thing = scannedPostfix.next();  
-
-			try
-			{
-				int value = Integer.parseInt(thing); //this will attempt to pars the value to a int
-				// my making it to this line the thing is forsure 
-				//an int and is made into a ValueNode
-				postfixNodes.push( new ValueNode(value)); 
-			}
-			catch(NumberFormatException e)//by trowing the exception we know the string is not a integer with values
-			{
-				// check to see if the string is an operator  
-				if(thing.equals("*")||thing.equals("/")||thing.equals("+")||thing.equals("-")){				
-					postfixNodes.push(new BinOpNode(thing, null, null)); //makes the OperatorNode
-				}
-				else{//if its not a value or an operator then iit must be a varible				
-					postfixNodes.push(new VariableNode(thing)); //makes the VariableNode
-				}
-			}
-
-		}
-		//While the stack with the elements is not empty, build the tree
-		while(!postfixNodes.empty())
-		{
-			//New stack to push tree elements, so when we take them off it builds the tree
-			Stack<Evaluable> wait = new Stack<Evaluable>();
-			Evaluable node = postfixNodes.pop();
-			BinOpNode bon;
-			VariableNode varNode;
-			ValueNode valNode;
-
-			//If the node is an operator, make it a root of a tree
-			if(node.equals(bon))
-			{
-				node.evaluate(maps);
-				node.
-				if(node.equals() != null)
-				{}
-			}
-		}
-
-
-		if(node.equals(valNode) || node.equals(varNode))
-		{
-			wait.push(node);
-		}
-
-		//go through and take nodes off saving them in numeric order if varible || value
-		//if operater then take the node and all the previously poped and 
-		//link themselves togetheras a mini tree
-		//turn into node
-
-		System.out.println(postfixNodes);
-	}
-
-    
-    /**
-     * 
-     * /
-     * 
-  
-    	public static void test() {
-    	
-	 }
-	 
 	/**
 	 * 
 	 * @return
 	 */
 	public Set<String> getVariables(){ //
-		Set<String> varibles = new LinkedHashSet<String>();
-		return varibles;
+		Set<String> variables = env.keySet();
+		return variables;
 	}
 
+	/**
+	 * Takes an expression in postfix form (as a string),
+	 * evaluates it, and returns the result.  It works by
+	 * pushing operands (numbers) onto a stack until it 
+	 * encounters an operator, then it applies the operator
+	 * to the top two items on the stack and replaces them
+	 * with the result.
+	 * Have the stack hold references to tree nodes: 
+	 * When you encounter a value or a variable, make a new 
+	 * tree node and push it onto the stack. When an operator 
+	 * is encountered, build a larger tree out of the operator and
+	 *  the two subtrees at the top of the stack, then push
+	 *   this new tree onto the stack.
+	 */
+	public static Stack<Evaluable> eval(String expr) {
+		Scanner tokens = new Scanner(expr);
+		finalTree = new Stack<Evaluable>();
+		while(tokens.hasNext()) {
+
+			if (tokens.hasNextDouble()) {
+				// If we get here, the next item is a number
+				double value = tokens.nextDouble();
+				finalTree.push(new ValueNode(value)); 
+
+			}
+			else {
+				// If we're here, the next thing is NOT a number
+				String next = tokens.next();
+				VariableNode node = null;
+				if(next.equals("*")||next.equals("/")||next.equals("+")||next.equals("-")){
+
+					//String operator = tokens.next();
+					Evaluable operand2 = null;
+					Evaluable operand1 = null;
+					try {
+						operand2 = finalTree.pop();
+						operand1 = finalTree.pop();
+					}
+					catch(Exception e) {
+						System.err.println("Not enough operands!");
+					}
+					if(next.equals("+")){
+						finalTree.push(new BinOpNode(next, operand1, operand2));
+					}else if(next.equals("-")){
+						finalTree.push(new BinOpNode(next, operand1, operand2));
+					}else if(next.equals("*")){
+						finalTree.push(new BinOpNode(next, operand1, operand2));
+					}else if(next.equals("/")){
+						finalTree.push(new BinOpNode(next, operand1, operand2));
+					}else{
+						System.err.println("Unknown operator: " + next);
+					}
+					break;
+				}else{ //It's a variable node, push it on the stack
+
+					finalTree.push(new VariableNode(next));
+
+				}
+
+			}
+		}
+		// If all went well, there should be exactly one thing
+		// left on the stack -- the overall result of the expression
+		System.out.println("final tree in eval method" + finalTree);
+		return finalTree;
+	}
+	/**
+	 * 
+	 * @throws InfixToPostfixParens.SyntaxErrorException
+	 */
+	public static void test() throws InfixToPostfixParens.SyntaxErrorException{
+
+		/* Testing the ValueNode */
+
+		ValueNode vlData = new ValueNode(7.888);
+		double vLd = 7.888;
+
+
+
+		// Check the constructor - Line 16
+		assert vlData == null : "Check the constructor - Line 16";
+
+		// Check the getData Method - Line 24
+		assert  vlData.getData() == 7.888 : "Checks the get Method in ValueNode Line 24";
+
+		// Check the getNodeType Method - Line 28 - NO
+		// check to make sure it returns the correct # as a double
+		assert  vlData.getData() == vLd;
+
+
+		// Check to ensure that evaluate method works - Line 37
+		// call on a value node and a map of null and check that it returns the correct data
+		// call on a value node and a map with other varibles and check that it returns the correct data
+
+		// Check the toString
+		// check to make sure it returns the correct value as a string 
+
+
+
+
+		/* Testing the VaribleNode */
+
+		// Check the constructor - Line 18
+		// make sure that you can create a varible node with 
+		// a String other than a BianaryNode
+
+		// QUESTION: if a varible node is passed a String 
+		// should we have the constructor throw an error
+
+		// make sure when you pass in a BinaryNode it does not make the Node
+
+		// Check the setLeft - Line 28
+		// make sure that when passes a evaluable node it 
+		// then saves to other node to the correct connection
+
+		// make sure that it will not work if a something is passes that is no Evaluable
+
+		// Check the setRight - Line 36
+		// make sure that when passes a evaluable node it then saves to other node to the correct connection
+
+		// make sure that it will not work if a something is passes that is no
+
+		// Check the getData - Line 44
+		// when called on a varible node it will return the correct string
+
+		// Check evaluate - Line 52
+		// run w/ map as null and have it throw IllegalArgumentException and make sure the full err is printed
+		// run w/ real map ask for a varible that is there and make sure it works
+		// run w/ real map asking for a varible that is not there and that it tthrows the error 
+
+		// Check toString - Line 81
+		// run method and verify it returns the correct string
+
+		/* Testing the BinOpNode */
+		// Check the BinOpNode Constructor - Line 22
+		// Try & Fail to make a node w/o a Binary Operator and see the exception thrown
+		// Make a Binary Operator
+
+		// Check the setLeft method - Line 36
+		// set a node and make sure that it is saved on the correct side
+
+		// Check the setRight method - Line 44
+		// set a node and make sure that it is saved on the correct side
+
+		// Check the setgetNODE_TYPE() method - Line 56
+		// call this and make sure that it redurns the correct string
+
+		// Check the evaluate method - Line 65
+		// check that the method will run on a all value equation w/ a map of null
+		// check that the method will run on a all value equation w/ a varible map w/ varibles
+
+		// Check the toString method - Line 96
+		// check to ensure that if there is just an operator that it still works
+		// check to make sure that the method also print all the lower portions of the trees
+
+		// Check the main method
+	}
 	/**
 	 * 
 	 */
 	public String toString(){
-		return null;
+		return "This is a string representation " + finalTree;
+	}
+
+	/**
+	 * 
+	 * @param args
+	 * @throws SyntaxErrorException
+	 */
+	public static void main(String[] args) throws SyntaxErrorException{
+		Expression e = new Expression(" 1 + 2 * ( 3 - 4 ) ");
+		System.out.println( e.toString());
+
+		//e.evaluate(null);
+		System.out.println("This is what was evaluated " + e.evaluate(null));
+		System.out.println(e.toString());
+
+		
+		//		env = new HashMap();
+		//		env.put("foo", 17.8);
+		//		Expression e = new Expression(" ( foo + ( 1.0 * ( foo + 2.5 ) ) ) " );
+		//		System.out.println(e.evaluate(env));
+		//		System.out.println( e.toString());
+		//		//This should prin the variable
+		//		System.out.println("Variable" +  e.getVariables().toString());
+
+
 	}
 }
