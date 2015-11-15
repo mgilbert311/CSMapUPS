@@ -7,27 +7,23 @@ import java.util.Map;
  * @version (a version number or a date)
  */
 public class ValueNode implements Evaluable{
-    private int data;
-    private final String NODE_TYPE = "ValueNode";
-     
+    private double data;
     /**
      * 
      * @param d
      */
-    public ValueNode(double val){
-         this.data = val;
+    public ValueNode(double d){
+         this.data = d;
     }
     
     /**
      * 
      * @return
      */
-    public int getData(){
+    public double getData(){
         return data;
     }
-      
-    /* what is a java.util.Map<java.lang.String,java.lang.Double> */ 
-    //keeps track of the values for the varibles
+    
     /**Evaluates the expression and returns its value as a double.
        @param java.util.Map<java.lang.String,java.lang.Double>
        @return value*/
@@ -35,17 +31,12 @@ public class ValueNode implements Evaluable{
         return data;
     }
     
-        
-    public String getNODE_TYPE()
-    {
-        return NODE_TYPE;
-    }
     /**
      * 
      */
     public String toString(){
-        String valueString = "" + this.data;
-        return valueString;
+       // String valueString = "" + this.data;
+        return " " + data;
     }
 }
 
